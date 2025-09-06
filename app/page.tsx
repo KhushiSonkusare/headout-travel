@@ -247,8 +247,8 @@ export default function HomePage() {
                       </div>
                     );
                   })}
-                </div>
-              </div>
+            </div>
+          </div>
             </div>
           </div>
         </div>
@@ -311,7 +311,7 @@ export default function HomePage() {
                     }`}
                   >
                     {index + 1}
-                  </div>
+                </div>
                 ))}
               </div>
               
@@ -340,18 +340,18 @@ export default function HomePage() {
                 <Button className={`${countries[activeCountry].buttonColor} text-white px-12 py-4 text-lg font-semibold transition-all duration-500`}>
                   {countries[activeCountry].buttonText}
                 </Button>
-              </div>
+            </div>
 
               {/* Three Side Images */}
-              <div className="absolute right-8 top-8 space-y-4">
+            <div className="absolute right-8 top-8 space-y-4">
                 {countries[activeCountry].sideImages.map((sideImage, index) => (
                   <div key={index} className="w-40 h-32 rounded-lg overflow-hidden shadow-2xl transition-all duration-500">
-                    <img
+                <img
                       src={sideImage.src}
                       alt={sideImage.alt}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
+                  className="w-full h-full object-cover"
+                />
+              </div>
                 ))}
               </div>
             </div>

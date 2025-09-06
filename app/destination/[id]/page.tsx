@@ -51,8 +51,7 @@ export default function DestinationPage({ params }: { params: { id: string } }) 
           </Link>
           <div className="h-6 w-px bg-[#b2b2b2]/20" />
           <h1 className="text-xl font-semibold">Holy Cottage</h1>
-        </div>
-        <div className="text-xl font-bold text-[#ff0000]">$50/day</div>
+          </div>
       </header>
 
       <div className="max-w-6xl mx-auto px-6 py-8">

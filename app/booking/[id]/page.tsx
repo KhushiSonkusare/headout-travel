@@ -150,6 +150,40 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                 </div>
               </div>
             </div>
+
+            {/* Terms and Conditions - Moved to left side */}
+            <div className="bg-[#b2b2b2]/10 rounded-lg p-6">
+              <h3 className="text-lg font-semibold mb-4">Terms & Conditions</h3>
+              <ul className="space-y-2 text-sm text-[#b2b2b2]">
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Valid only for the dates mentioned on the ticket</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Non-transferable and non-refundable after check-in</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Guest must carry valid government-issued ID proof</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Subject to availability and weather conditions</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Check-in time: 2:00 PM | Check-out time: 11:00 AM</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Damage to property will be charged separately</span>
+                </li>
+              </ul>
+              <p className="text-xs text-[#b2b2b2]/60 mt-4 pt-4 border-t border-[#b2b2b2]/20">
+                By proceeding with the booking, you agree to all the terms and conditions mentioned above and our general booking policy.
+              </p>
+            </div>
           </div>
 
           {/* Right Side - Redesigned Booking Ticket */}
@@ -235,7 +269,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                           )}
                           {children > 0 && (
                             <div className="text-sm">
-                              <span className="text-gray-500">Children:</span> {children} × ₹{childPrice.toLocaleString()}
+                                                            <span className="text-gray-500">Children:</span> {children} × ₹{childPrice.toLocaleString()}
                             </div>
                           )}
                         </div>
@@ -301,22 +335,13 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                 <div className="absolute -bottom-4 -right-4 w-full h-full bg-black/10 rounded-lg -z-10 blur-xl"></div>
               </div>
 
-              {/* Terms and Conditions */}
-              <div className="mt-8 p-4 bg-gray-900/20 rounded-lg text-xs text-gray-400">
-                <p className="mb-2">Terms & Conditions:</p>
-                <ul className="space-y-1 list-disc list-inside">
-                  <li>Valid only for the dates mentioned above</li>
-                  <li>Non-transferable and non-refundable after check-in</li>
-                  <li>Guest must carry valid ID proof</li>
-                  <li>Subject to availability and weather conditions</li>
-                </ul>
-              </div>
-
               {/* Confirm & Pay Button */}
-              <div className="mt-6">
-                <Button className="w-full bg-[#ff0000] hover:bg-[#ff0000]/90 text-white font-semibold py-4 rounded-xl text-lg shadow-lg transition-all hover:shadow-red-500/20 hover:shadow-2xl">
+              <div className="mt-8">
+                <Button 
+                  className="w-full bg-[#ff0000] hover:bg-[#ff0000]/90 text-white font-semibold py-4 rounded-xl text-lg shadow-lg transition-all hover:shadow-red-500/20 hover:shadow-2xl"
+                  disabled={adults + seniors + children === 0}
+                >
                   <span className="flex items-center justify-center gap-2">
-                    <span>🔒</span>
                     <span>Confirm & Pay ₹{totalPrice.toLocaleString()}</span>
                   </span>
                 </Button>
@@ -325,7 +350,7 @@ export default function BookingPage({ params }: { params: { id: string } }) {
                     Secure payment • Instant confirmation
                   </p>
                   <p className="text-xs text-[#b2b2b2]/60 mt-2">
-                    By continuing, you agree to the General Terms, Privacy Policy, and Cancellation Policy.
+                    By continuing, you agree to our terms and conditions.
                   </p>
                 </div>
               </div>
