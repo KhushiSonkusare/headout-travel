@@ -10,6 +10,23 @@ export const metadata: Metadata = {
   generator: 'v0.app',
 }
 
+import { Inter, Playfair_Display } from 'next/font/google';
+import './globals.css'; // Your global styles
+
+// Define Inter for body text and general UI
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter', // This makes it available as a CSS variable
+});
+
+// Define Playfair Display for headings and display text
+const playfairDisplay = Playfair_Display({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-playfair-display', // This makes it available as a CSS variable
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{

@@ -114,6 +114,36 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Add font variables */
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  
+  /* Your existing color variables */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  /* ... rest of your variables ... */
+}
+
+/* Add this after your @theme inline section */
+@theme {
+  /* Define custom font families for Tailwind v4 */
+  --font-family-sans: var(--font-inter);
+  --font-family-playfair: var(--font-playfair);
+}
+
+/* If the above doesn't work, try this alternative approach */
+@layer utilities {
+  .font-playfair {
+    font-family: var(--font-playfair);
+  }
+}
+
 
 @layer base {
   * {
@@ -129,9 +159,7 @@
   perspective: 1000px;
 }
 
-.fan-container {
-  /* Static fan layout - no animations */
-}
+
 
 .card-3d {
   transform-style: preserve-3d;
@@ -148,13 +176,7 @@
   transform-style: preserve-3d;
 }
 
-.card-hover:hover {
-  /* Hover effect handled by parent transform */
-}
 
-/* No animations needed */
-
-/* Ensure proper 3D rendering */
 .card-3d * {
   backface-visibility: hidden;
 }

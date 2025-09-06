@@ -77,11 +77,11 @@ export default function HomePage() {
     }
   ];
 
-  // Infinite auto-rotate cards
+  // Infinite auto-rotate cards - Faster rotation
   useEffect(() => {
     const interval = setInterval(() => {
       setCardRotation(prev => (prev + 1) % cards.length);
-    }, 2500); // Rotate every 2.5 seconds
+    }, 2500); 
 
     return () => clearInterval(interval);
   }, [cards.length]);
@@ -94,7 +94,7 @@ export default function HomePage() {
           <div className="w-8 h-8 bg-[#ffffff] rounded flex items-center justify-center">
             <span className="text-[#000000] font-bold text-sm">H</span>
           </div>
-          <span className="text-xl font-semibold">headout</span>
+          <span className="text-xl font-playfair font-semibold">headout</span>
         </div>
         <nav className="hidden md:flex items-center gap-8">
           <a href="#" className="hover:text-[#b2b2b2] transition-colors">
@@ -114,8 +114,8 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="text-center py-20 px-6">
-        <h1 className="text-5xl md:text-6xl font-bold mb-6 text-balance">Ready to Head Out?</h1>
-        <p className="text-xl text-[#b2b2b2] mb-16 max-w-2xl mx-auto">
+        <h1 className="text-5xl md:text-6xl font-playfair font-semibold mb-6 text-balance">Ready to Head Out?</h1>
+        <p className="text-xl text-[#b2b2b2] mb-16 max-w-2xl mx-auto font-playfair">
           Find and book your perfect experience in under 30 seconds
         </p>
 
@@ -151,6 +151,12 @@ export default function HomePage() {
                     // Calculate the position based on rotation
                     const rotatedIndex = (index - cardRotation + cards.length) % cards.length;
                     
+                    // Check if card is transitioning from leftmost to rightmost
+                    const previousRotation = (cardRotation - 1 + cards.length) % cards.length;
+                    const wasLeftmost = (index - previousRotation + cards.length) % cards.length === 0;
+                    const isNowRightmost = rotatedIndex === 4;
+                    const isTransitioning = wasLeftmost && isNowRightmost;
+                    const isLeftmostSlidingOut = rotatedIndex === 0 && index === cardRotation;
                     // Position configurations for 5 cards
                     const positions = [
                       { 
@@ -208,20 +214,51 @@ export default function HomePage() {
                     const pos = positions[rotatedIndex];
                     const zIndex = rotatedIndex === 2 ? 10 : rotatedIndex === 1 || rotatedIndex === 3 ? 5 : 1;
                     
+                    // Special handling for transitioning card
+                    let transform = `
+                      translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) 
+                      rotateX(${pos.rotateX}deg) 
+                      rotateY(${pos.rotateY}deg) 
+                      rotateZ(${pos.rotateZ}deg) 
+                      scale(${pos.scale})
+                    `;
+                    
+                    let opacity = pos.opacity;
+                    let transitionDuration = '800ms';
+                    
+                    if (isTransitioning) {
+                      // Keep the existing right-side entry logic
+                      transform = `translate3d(600px, ${pos.y}px, ${pos.z}px) rotateY(-45deg) scale(0.8)`;
+                      opacity = 0;
+                      transitionDuration = '0ms';
+                      
+                      // After a brief delay, move it to the correct position
+                      setTimeout(() => {
+                        const element = document.querySelector(`[data-card-index="${index}"]`);
+                        if (element) {
+                          element.style.transition = 'all 800ms cubic-bezier(0.4, 0.0, 0.2, 1)';
+                          element.style.transform = `
+                                                        translate3d(${positions[4].x}px, ${positions[4].y}px, ${positions[4].z}px) 
+                            rotateX(${positions[4].rotateX}deg) 
+                            rotateY(${positions[4].rotateY}deg) 
+                            rotateZ(${positions[4].rotateZ}deg) 
+                            scale(${positions[4].scale})
+                          `;
+                          element.style.opacity = positions[4].opacity;
+                        }
+                      }, 50);
+                    }
+                    
                     return (
                       <div
                         key={index}
-                        className="absolute transition-all duration-1000 ease-in-out"
+                        data-card-index={index}
+                        className="absolute"
                         style={{
-                          transform: `
-                            translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) 
-                            rotateX(${pos.rotateX}deg) 
-                            rotateY(${pos.rotateY}deg) 
-                            rotateZ(${pos.rotateZ}deg) 
-                            scale(${pos.scale})
-                          `,
+                          transform: transform,
                           zIndex: zIndex,
-                          opacity: pos.opacity,
+                          opacity: opacity,
+                          transition: `all ${transitionDuration} cubic-bezier(0.4, 0.0, 0.2, 1)`,
                           transformStyle: 'preserve-3d',
                           transformOrigin: 'center center'
                         }}
@@ -260,7 +297,7 @@ export default function HomePage() {
           <div className="w-12 h-12 bg-[#ffffff] rounded-full flex items-center justify-center mb-4">
             <Check className="w-6 h-6 text-[#000000]" />
           </div>
-          <h3 className="text-2xl font-bold mb-4">Only the finest</h3>
+          <h3 className="text-2xl font-playfair font-bold mb-4">Only the finest</h3>
           <p className="text-[#b2b2b2] leading-relaxed">
             At headout, you only find the best. We do the hard work so you don't have to.
           </p>
@@ -270,7 +307,7 @@ export default function HomePage() {
           <div className="w-12 h-12 bg-[#ffffff] rounded-full flex items-center justify-center mb-4">
             <Star className="w-6 h-6 text-[#000000]" />
           </div>
-          <h3 className="text-2xl font-bold mb-4">Greed is good</h3>
+          <h3 className="text-2xl font-playfair font-bold mb-4">Greed is good</h3>
           <p className="text-[#b2b2b2] leading-relaxed">
             With quality, you also get lowest prices, last-minute availability and 24x7 support.
           </p>
@@ -280,7 +317,7 @@ export default function HomePage() {
           <div className="w-12 h-12 bg-[#ffffff] rounded-full flex items-center justify-center mb-4">
             <MapPin className="w-6 h-6 text-[#000000]" />
           </div>
-          <h3 className="text-2xl font-bold mb-4">Experience every flavour</h3>
+          <h3 className="text-2xl font-playfair font-bold mb-4">Experience every flavour</h3>
           <p className="text-[#b2b2b2] leading-relaxed">
             Offbeat or mainstream, a tour or a show, a game or a museum - we have 'em all.
           </p>
@@ -288,82 +325,81 @@ export default function HomePage() {
       </section>
 
       {/* Explore Countries Section */}
-      <section className="py-20 px-6">
-        <h2 className="text-6xl font-bold text-center mb-20">Explore Top Countries</h2>
+      
+<section className="py-20 px-6">
+  <h2 className="text-6xl font-playfair font-bold text-center mb-20">Explore Top Countries</h2>
 
-        <div className="relative max-w-6xl mx-auto">
-          {/* Line Navigation */}
-          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-20">
-            <div className="flex flex-col items-center space-y-8">
-              {/* Vertical Line */}
-              <div className="w-1 h-32 bg-white/30 rounded-full"></div>
-              
-              {/* Navigation Circles */}
-              <div className="flex flex-col space-y-6">
-                {countries.map((_, index) => (
-                  <div
-                    key={index}
-                    onClick={() => setActiveCountry(index)}
-                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg cursor-pointer hover:scale-110 transition-all duration-300 ${
-                      activeCountry === index
-                        ? 'bg-white text-black'
-                        : 'bg-white/30 text-white'
-                    }`}
-                  >
-                    {index + 1}
-                </div>
-                ))}
+  <div className="relative max-w-7xl mx-auto">
+    {/* Main Content Area - Increased size */}
+    <div className="relative h-[600px] rounded-2xl overflow-hidden">
+      <img
+        src={countries[activeCountry].image}
+        alt={countries[activeCountry].name}
+        className="w-full h-full object-cover transition-all duration-500"
+      />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
+
+      {/* Line Navigation - Now overlaid on image */}
+      <div className="absolute left-12 top-1/2 transform -translate-y-1/2 z-20">
+        <div className="flex flex-col items-center space-y-8">
+          {/* Top Vertical Line - Thinner */}
+          <div className="w-[1px] h-20 bg-white/20"></div>
+          
+          {/* Navigation Circles */}
+          <div className="flex flex-col space-y-6">
+            {countries.map((_, index) => (
+              <div
+                key={index}
+                onClick={() => setActiveCountry(index)}
+                className={`w-10 h-10 rounded-full flex items-center justify-center font-medium text-sm cursor-pointer hover:scale-110 transition-all duration-300 backdrop-blur-sm ${
+                  activeCountry === index
+                    ? 'bg-white/90 text-black border border-white/30'
+                    : 'bg-white/10 text-white border border-white/20'
+                }`}
+              >
+                {index + 1}
               </div>
-              
-              {/* Vertical Line */}
-              <div className="w-1 h-32 bg-white/30 rounded-full"></div>
-            </div>
+            ))}
           </div>
-
-          {/* Main Content Area */}
-          <div className="ml-20">
-            <div className="relative h-[500px] rounded-2xl overflow-hidden">
-              <img
-                src={countries[activeCountry].image}
-                alt={countries[activeCountry].name}
-                className="w-full h-full object-cover transition-all duration-500"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
-
-              <div className="absolute left-12 top-1/2 transform -translate-y-1/2 text-left">
-                <h3 className="text-6xl font-bold mb-6 text-white transition-all duration-500">
-                  {countries[activeCountry].name}
-                </h3>
-                <p className="text-2xl text-white/90 mb-8 max-w-2xl leading-relaxed transition-all duration-500">
-                  {countries[activeCountry].description}
-                </p>
-                <Button className={`${countries[activeCountry].buttonColor} text-white px-12 py-4 text-lg font-semibold transition-all duration-500`}>
-                  {countries[activeCountry].buttonText}
-                </Button>
-            </div>
-
-              {/* Three Side Images */}
-            <div className="absolute right-8 top-8 space-y-4">
-                {countries[activeCountry].sideImages.map((sideImage, index) => (
-                  <div key={index} className="w-40 h-32 rounded-lg overflow-hidden shadow-2xl transition-all duration-500">
-                <img
-                      src={sideImage.src}
-                      alt={sideImage.alt}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          
+          {/* Bottom Vertical Line - Thinner */}
+          <div className="w-[1px] h-20 bg-white/20"></div>
         </div>
-      </section>
+      </div>
+
+      <div className="absolute left-28 top-1/2 transform -translate-y-1/2 text-left">
+        <h3 className="text-7xl font-bold mb-6 text-white transition-all duration-500">
+          {countries[activeCountry].name}
+        </h3>
+        <p className="text-2xl text-white/90 mb-8 max-w-2xl leading-relaxed transition-all duration-500">
+          {countries[activeCountry].description}
+        </p>
+        <Button className="bg-white hover:bg-white/90 text-black px-12 py-4 text-lg font-semibold transition-all duration-300 shadow-lg">
+          {countries[activeCountry].buttonText}
+        </Button>
+      </div>
+
+      {/* Three Side Images */}
+      <div className="absolute right-12 top-12 space-y-4">
+        {countries[activeCountry].sideImages.map((sideImage, index) => (
+          <div key={index} className="w-44 h-36 rounded-lg overflow-hidden shadow-2xl transition-all duration-500 hover:scale-105">
+            <img
+              src={sideImage.src}
+              alt={sideImage.alt}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Top Destinations */}
       <section className="py-20 px-6">
         <div className="text-center mb-16">
           <p className="text-[#b2b2b2] mb-2">and the best for you</p>
-          <h2 className="text-4xl font-bold">Explore Top Destinations</h2>
+          <h2 className="text-4xl font-playfair font-bold">Explore Top Destinations</h2>
         </div>
 
         <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
@@ -400,7 +436,7 @@ export default function HomePage() {
       <section className="py-20 px-6 border-t border-[#b2b2b2]/20">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-3xl font-bold mb-4">Subscribe to get tips and tactics to grow the way you want.</h2>
+            <h2 className="text-3xl font-playfair font-bold mb-4">Subscribe to get tips and tactics to grow the way you want.</h2>
           </div>
 
           <div className="flex gap-2">
@@ -439,28 +475,12 @@ export default function HomePage() {
           <div className="flex items-center justify-between pt-8 border-t border-[#b2b2b2]/20">
             <div className="flex items-center gap-2">
               <div className="w-6 h-6 bg-[#ffffff] rounded-full flex items-center justify-center">
-                <span className="text-[#000000] font-bold text-xs">G</span>
+                <span className="text-[#000000] font-bold text-xs">H</span>
               </div>
-              <span className="text-sm text-[#b2b2b2]">© Gunmook, Inc.</span>
+              <span className="text-sm text-[#b2b2b2]">© Headout</span>
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="w-8 h-8 bg-[#b2b2b2]/20 rounded-full flex items-center justify-center">
-                <span className="text-sm">T</span>
-              </div>
-              <div className="w-8 h-8 bg-[#b2b2b2]/20 rounded-full flex items-center justify-center">
-                <span className="text-sm">Y</span>
-              </div>
-              <div className="w-8 h-8 bg-[#b2b2b2]/20 rounded-full flex items-center justify-center">
-                <span className="text-sm">I</span>
-              </div>
-              <div className="w-8 h-8 bg-[#b2b2b2]/20 rounded-full flex items-center justify-center">
-                <span className="text-sm">F</span>
-              </div>
-              <div className="w-8 h-8 bg-[#b2b2b2]/20 rounded-full flex items-center justify-center">
-                <span className="text-sm">P</span>
-              </div>
-            </div>
+            
           </div>
         </div>
       </footer>
