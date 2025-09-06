@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowLeft, Minus, Plus } from "lucide-react"
+import { ArrowLeft, Minus, Plus, MapPin, Calendar, Clock, Users } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 
@@ -26,7 +26,6 @@ export default function BookingPage({ params }: { params: { id: string } }) {
             className="flex items-center gap-2 hover:text-[#b2b2b2] transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Back</span>
           </Link>
           <div className="h-6 w-px bg-[#b2b2b2]/20" />
           <h1 className="text-xl font-semibold">Complete Your Booking</h1>
@@ -153,109 +152,182 @@ export default function BookingPage({ params }: { params: { id: string } }) {
             </div>
           </div>
 
-          {/* Right Side - Booking Ticket */}
-          <div className="flex justify-center">
-            <div className="w-full max-w-sm relative">
-              {/* Ticket Container with Glassmorphism */}
-              <div className="relative backdrop-blur-xl bg-gradient-to-br from-blue-400/20 via-purple-500/20 to-teal-400/20 border border-white/30 rounded-3xl overflow-hidden shadow-2xl">
-                {/* Main Image Section */}
-                <div
-                  className="relative h-48 bg-cover bg-center"
-                  style={{ backgroundImage: "url('/holy-cottage-main-view.jpg')" }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-b from-blue-500/40 to-purple-600/40 backdrop-blur-[1px]"></div>
-
-                  {/* Experience Title */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
-                    <div className="text-4xl font-bold mb-2 text-shadow-lg">Holy Cottage</div>
-                    <div className="text-lg opacity-90">+ EXPERIENCE +</div>
-                  </div>
-                </div>
-
-                {/* Guest Details Section */}
-                <div className="p-6 backdrop-blur-md bg-white/25 border-t border-white/20">
-                  <div className="text-white/80 text-sm mb-2">Guest Name</div>
-                  <div className="text-white text-xl font-semibold mb-6">John Traveler</div>
-
-                  {/* Booking Details Grid */}
-                  <div className="grid grid-cols-3 gap-4 text-center mb-6">
-                    <div>
-                      <div className="text-white/80 text-xs mb-1">Check-in</div>
-                      <div className="text-white font-bold text-lg">30</div>
-                      <div className="text-white/80 text-xs">Dec</div>
-                    </div>
-                    <div>
-                      <div className="text-white/80 text-xs mb-1">Duration</div>
-                      <div className="text-white font-bold text-lg">3</div>
-                      <div className="text-white/80 text-xs">Days</div>
-                    </div>
-                    <div>
-                      <div className="text-white/80 text-xs mb-1">Guests</div>
-                      <div className="text-white font-bold text-lg">{adults + seniors + children}</div>
-                      <div className="text-white/80 text-xs">Total</div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <div className="text-white/80 text-xs mb-1">Adults</div>
-                      <div className="text-white font-bold">{adults}</div>
-                    </div>
-                    <div>
-                      <div className="text-white/80 text-xs mb-1">Check-out</div>
-                      <div className="text-white font-bold">02/01</div>
-                    </div>
-                    <div>
-                      <div className="text-white/80 text-xs mb-1">Booking ID</div>
-                      <div className="text-white font-bold">HC205</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Dotted Separator */}
-                <div className="relative">
-                  <div className="border-t border-dashed border-white/40"></div>
-                  <div className="absolute -left-4 top-0 w-8 h-8 bg-[#000000] rounded-full transform -translate-y-1/2"></div>
-                  <div className="absolute -right-4 top-0 w-8 h-8 bg-[#000000] rounded-full transform -translate-y-1/2"></div>
-                </div>
-
-                {/* Bottom Section */}
-                <div className="p-6 backdrop-blur-md bg-white/20 flex justify-between items-center">
-                  <div className="text-white">
-                    <div className="text-xs text-white/80 mb-1">Guest Name</div>
-                    <div className="font-semibold mb-3">John Traveler</div>
-                    <div className="text-xs space-y-1">
+          {/* Right Side - Redesigned Booking Ticket */}
+          <div className="flex justify-center items-center">
+            <div className="w-full max-w-md">
+              {/* Ticket Container */}
+              <div className="relative transform rotate-2 hover:rotate-0 transition-transform duration-300">
+                {/* Main Ticket */}
+                <div className="bg-gradient-to-br from-gray-100 to-white text-gray-900 rounded-lg shadow-2xl overflow-hidden">
+                  {/* Top Border Pattern */}
+                  <div className="h-4 bg-gradient-to-r from-red-500 to-red-600"></div>
+                  
+                  {/* Ticket Header */}
+                  <div className="px-6 pt-6 pb-4">
+                    <div className="flex justify-between items-start">
                       <div>
-                        <span className="text-white/80">Booking</span> HC205
+                        <h3 className="text-xs text-gray-500 uppercase tracking-wider">Experience Ticket</h3>
+                        <h2 className="text-2xl font-bold mt-1">HOLY COTTAGE</h2>
+                        <p className="text-sm text-gray-600 mt-1">Premium Stay Experience</p>
                       </div>
-                      <div>
-                        <span className="text-white/80">Total</span> ₹{totalPrice.toLocaleString()}
+                      <div className="text-right">
+                        <div className="text-xs text-gray-500">Ticket No.</div>
+                        <div className="font-mono text-sm font-bold">HC-2025-{Math.floor(Math.random() * 9000) + 1000}</div>
                       </div>
                     </div>
                   </div>
 
-                  {/* QR Code */}
-                  <div className="w-16 h-16 bg-white/90 backdrop-blur-sm rounded-lg flex items-center justify-center border border-white/40 shadow-lg">
-                    <div className="w-12 h-12 bg-gradient-to-br from-gray-800 to-black rounded flex items-center justify-center">
-                      <div className="w-8 h-8 bg-white rounded-sm flex items-center justify-center">
-                        <div className="text-black text-xs font-mono font-bold">QR</div>
+                  {/* Ticket Details Grid */}
+                  <div className="px-6 py-4 bg-gray-50">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-gray-500" />
+                        <div>
+                          <div className="text-xs text-gray-500">Check-in</div>
+                          <div className="font-semibold">Dec 30, 2025</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-gray-500" />
+                        <div>
+                          <div className="text-xs text-gray-500">Check-out</div>
+                          <div className="font-semibold">Jan 02, 2026</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-gray-500" />
+                        <div>
+                          <div className="text-xs text-gray-500">Guests</div>
+                          <div className="font-semibold">{adults + seniors + children} People</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-gray-500" />
+                        <div>
+                          <div className="text-xs text-gray-500">Location</div>
+                          <div className="font-semibold text-sm">Flores, NY</div>
+                        </div>
                       </div>
                     </div>
                   </div>
+
+                  {/* Perforated Line */}
+                  <div className="relative px-6">
+                    <div className="border-t-2 border-dashed border-gray-300"></div>
+                    <div className="absolute -left-3 top-0 w-6 h-6 bg-black rounded-full transform -translate-y-1/2"></div>
+                    <div className="absolute -right-3 top-0 w-6 h-6 bg-black rounded-full transform -translate-y-1/2"></div>
+                  </div>
+
+                  {/* Guest Details Section */}
+                  <div className="px-6 py-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="text-xs text-gray-500 uppercase tracking-wider">Guest Name</div>
+                        <div className="font-bold text-lg mt-1">John Traveler</div>
+                        <div className="mt-3 space-y-1">
+                          <div className="text-sm">
+                            <span className="text-gray-500">Adults:</span> {adults} × ₹{adultPrice.toLocaleString()}
+                          </div>
+                          {seniors > 0 && (
+                            <div className="text-sm">
+                              <span className="text-gray-500">Seniors:</span> {seniors} × ₹{seniorPrice.toLocaleString()}
+                            </div>
+                          )}
+                          {children > 0 && (
+                            <div className="text-sm">
+                              <span className="text-gray-500">Children:</span> {children} × ₹{childPrice.toLocaleString()}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xs text-gray-500 uppercase tracking-wider">Total Amount</div>
+                        <div className="text-3xl font-bold text-red-600 mt-1">
+                          ₹{totalPrice.toLocaleString()}
+                        </div>
+                        <div className="text-xs text-gray-500 mt-1">
+                          ≈ ${(totalPrice * 0.012).toFixed(2)} USD
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Barcode Section */}
+                  <div className="bg-gray-900 px-6 py-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="h-12 bg-white rounded flex items-center justify-center p-2">
+                          {/* Barcode Lines */}
+                          <div className="flex gap-[2px] h-full items-center">
+                            {Array.from({ length: 30 }).map((_, i) => (
+                              <div
+                                key={i}
+                                className="bg-black"
+                                style={{
+                                  height: i % 3 === 0 ? '100%' : i % 2 === 0 ? '80%' : '60%',
+                                  width: i % 4 === 0 ? '3px' : '1px'
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="ml-4 w-16 h-16 bg-white rounded-lg p-1 flex items-center justify-center">
+                        {/* QR Code */}
+                        <div className="w-full h-full bg-black rounded-sm flex items-center justify-center p-1">
+                          <div className="grid grid-cols-3 gap-[1px]">
+                            {Array.from({ length: 9 }).map((_, i) => (
+                              <div
+                                key={i}
+                                className={`w-3 h-3 ${
+                                  [0, 2, 4, 6, 8].includes(i) ? 'bg-white' : 'bg-black'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-center text-white text-xs mt-2 font-mono">
+                      HC2025{Math.floor(Math.random() * 900000) + 100000}
+                    </div>
+                  </div>
+
+                  {/* Bottom Border */}
+                  <div className="h-4 bg-gradient-to-r from-red-500 to-red-600"></div>
                 </div>
+
+                {/* Ticket Shadow Effect */}
+                <div className="absolute -bottom-4 -right-4 w-full h-full bg-black/10 rounded-lg -z-10 blur-xl"></div>
+              </div>
+
+              {/* Terms and Conditions */}
+              <div className="mt-8 p-4 bg-gray-900/20 rounded-lg text-xs text-gray-400">
+                <p className="mb-2">Terms & Conditions:</p>
+                <ul className="space-y-1 list-disc list-inside">
+                  <li>Valid only for the dates mentioned above</li>
+                  <li>Non-transferable and non-refundable after check-in</li>
+                  <li>Guest must carry valid ID proof</li>
+                  <li>Subject to availability and weather conditions</li>
+                </ul>
               </div>
 
               {/* Confirm & Pay Button */}
-              <div className="mt-8">
-                <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 rounded-xl text-lg shadow-lg">
-                  🔒 Confirm & Pay ₹{totalPrice.toLocaleString()}
+              <div className="mt-6">
+                <Button className="w-full bg-[#ff0000] hover:bg-[#ff0000]/90 text-white font-semibold py-4 rounded-xl text-lg shadow-lg transition-all hover:shadow-red-500/20 hover:shadow-2xl">
+                  <span className="flex items-center justify-center gap-2">
+                    <span>🔒</span>
+                    <span>Confirm & Pay ₹{totalPrice.toLocaleString()}</span>
+                  </span>
                 </Button>
-                <p className="text-center text-[#b2b2b2] text-sm mt-4">
-                  You'll pay ${(totalPrice * 0.012).toFixed(2)} USD
-                </p>
-                <p className="text-center text-xs text-[#b2b2b2] mt-2">
-                  By continuing, you agree to the General Terms, Privacy Policy, and Cancellation Policy.
-                </p>
+                <div className="mt-4 text-center">
+                  <p className="text-[#b2b2b2] text-sm">
+                    Secure payment • Instant confirmation
+                  </p>
+                  <p className="text-xs text-[#b2b2b2]/60 mt-2">
+                    By continuing, you agree to the General Terms, Privacy Policy, and Cancellation Policy.
+                  </p>
+                </div>
               </div>
             </div>
           </div>

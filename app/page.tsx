@@ -1,9 +1,91 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ArrowRight, Check, Star, MapPin } from "lucide-react"
 import Link from "next/link"
+import { useState, useEffect } from "react"
 
 export default function HomePage() {
+  const [activeCountry, setActiveCountry] = useState(0);
+  const [cardRotation, setCardRotation] = useState(0);
+
+  const countries = [
+    {
+      name: "Japan",
+      image: "/japan-mount-fuji-cherry-blossoms.jpg",
+      description: "Discover the land of the rising sun with its ancient temples, modern cities, and breathtaking natural beauty.",
+      buttonColor: "bg-red-500 hover:bg-red-600",
+      buttonText: "EXPLORE JAPAN",
+      sideImages: [
+        { src: "/seoul-south-korea-traditional-palace-architecture.jpg", alt: "Tokyo" },
+        { src: "/kelingking-beach-nusa-penida-cliff.jpg", alt: "Kyoto" },
+        { src: "/crystal-bay-nusa-penida-turquoise-water.jpg", alt: "Osaka" }
+      ]
+    },
+    {
+      name: "Indonesia", 
+      image: "/nusa-penida-indonesia-tropical-island-aerial-view.jpg",
+      description: "Explore thousands of islands with pristine beaches, volcanic landscapes, and rich cultural heritage.",
+      buttonColor: "bg-teal-500 hover:bg-teal-600",
+      buttonText: "EXPLORE INDONESIA",
+      sideImages: [
+        { src: "/kelingking-beach-nusa-penida-cliff.jpg", alt: "Bali" },
+        { src: "/crystal-bay-nusa-penida-turquoise-water.jpg", alt: "Java" },
+        { src: "/thailand-phi-phi-islands-tropical-beach.jpg", alt: "Sumatra" }
+      ]
+    },
+    {
+      name: "Thailand",
+      image: "/thailand-phi-phi-islands-tropical-beach.jpg", 
+      description: "Experience the perfect blend of tropical paradise, ancient temples, and vibrant street culture.",
+      buttonColor: "bg-orange-500 hover:bg-orange-600",
+      buttonText: "EXPLORE THAILAND",
+      sideImages: [
+        { src: "/seoul-south-korea-traditional-palace-architecture.jpg", alt: "Bangkok" },
+        { src: "/kelingking-beach-nusa-penida-cliff.jpg", alt: "Chiang Mai" },
+        { src: "/crystal-bay-nusa-penida-turquoise-water.jpg", alt: "Phuket" }
+      ]
+    }
+  ];
+
+  const cards = [
+    {
+      src: "/dark-volcanic-landscape-with-red-lava.jpg",
+      title: "Selected process from",
+      subtitle: "the last month"
+    },
+    {
+      src: "/otherworldly-golden-marble-texture.jpg",
+      title: "Otherworldly places",
+      subtitle: "located on Earth"
+    },
+    {
+      src: "/abstract-blue-and-gold-soundwaves-visualization.jpg",
+      title: "Visualizing distorted",
+      subtitle: "sound waves"
+    },
+    {
+      src: "/purple-pink-abstract-marble-texture.jpg",
+      title: "Abstract textures",
+      subtitle: "and patterns"
+    },
+    {
+      src: "/japan-mount-fuji-cherry-blossoms.jpg",
+      title: "Cherry blossoms",
+      subtitle: "in Japan"
+    }
+  ];
+
+  // Infinite auto-rotate cards
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCardRotation(prev => (prev + 1) % cards.length);
+    }, 2500); // Rotate every 2.5 seconds
+
+    return () => clearInterval(interval);
+  }, [cards.length]);
+
   return (
     <div className="min-h-screen bg-[#000000] text-[#ffffff]">
       {/* Header */}
@@ -37,54 +119,137 @@ export default function HomePage() {
           Find and book your perfect experience in under 30 seconds
         </p>
 
-        {/* Experience Cards */}
-        <div className="flex justify-center items-center gap-4 mb-20 overflow-hidden">
-          <div className="relative w-48 h-64 transform -rotate-12 hover:rotate-0 transition-transform duration-300">
-            <img
-              src="/dark-volcanic-landscape-with-red-lava.jpg"
-              alt="Volcanic experience"
-              className="w-full h-full object-cover rounded-lg"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg" />
-            <div className="absolute bottom-4 left-4 text-left">
-              <p className="text-sm font-medium">Selected process from</p>
-              <p className="text-sm font-medium">the last month</p>
+        {/* Search Bar */}
+        <div className="mb-20 flex justify-center">
+          <div className="relative w-full max-w-2xl">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search destinations, experiences, or activities..."
+                className="w-full px-6 py-4 pl-14 pr-20 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/40 transition-all duration-300"
+              />
+              <div className="absolute left-5 top-1/2 transform -translate-y-1/2">
+                <svg className="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white px-6 py-2 rounded-full transition-all duration-300 backdrop-blur-sm">
+                Search
+              </button>
             </div>
           </div>
+        </div>
 
-          <div className="relative w-48 h-64 transform -rotate-6 hover:rotate-0 transition-transform duration-300">
-            <img
-              src="/otherworldly-golden-marble-texture.jpg"
-              alt="Otherworldly places"
-              className="w-full h-full object-cover rounded-lg"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg" />
-            <div className="absolute bottom-4 left-4 text-left">
-              <p className="text-sm font-medium">Otherworldly places</p>
-              <p className="text-sm font-medium">located on Earth</p>
+        {/* 3D Experience Cards with Infinite Rotation */}
+        <div className="relative mb-20 h-[500px] flex justify-center items-center overflow-hidden">
+          <div className="relative w-full h-full" style={{ perspective: '1200px' }}>
+            <div className="absolute inset-0 flex justify-center items-center">
+              <div className="relative w-full h-full flex justify-center items-center">
+                {/* Card Container with 3D Perspective */}
+                <div className="relative w-full h-full flex justify-center items-center" style={{ transformStyle: 'preserve-3d' }}>
+                  {cards.map((card, index) => {
+                    // Calculate the position based on rotation
+                    const rotatedIndex = (index - cardRotation + cards.length) % cards.length;
+                    
+                    // Position configurations for 5 cards
+                    const positions = [
+                      { 
+                        x: -500, 
+                        y: 40, 
+                        z: -300, 
+                        rotateX: -5,
+                        rotateY: 45,
+                        rotateZ: -2,
+                        scale: 0.8,
+                        opacity: 0.7
+                      }, // Far left
+                      { 
+                        x: -285, 
+                        y: 20, 
+                        z: -150, 
+                        rotateX: -3,
+                        rotateY: 25,
+                        rotateZ: -1,
+                        scale: 0.85,
+                        opacity: 0.85
+                      }, // Left
+                      { 
+                        x: 0, 
+                        y: 0, 
+                        z: 100, 
+                        rotateX: 0,
+                        rotateY: 0,
+                        rotateZ: 0,
+                        scale: 1,
+                        opacity: 1
+                      }, // Center - straight forward
+                      { 
+                        x: 285, 
+                        y: 20, 
+                        z: -150, 
+                        rotateX: -3,
+                        rotateY: -25,
+                        rotateZ: 1,
+                        scale: 0.85,
+                        opacity: 0.85
+                      }, // Right
+                      { 
+                        x: 500, 
+                        y: 40, 
+                        z: -300, 
+                        rotateX: -5,
+                        rotateY: -45,
+                        rotateZ: 2,
+                        scale: 0.8,
+                        opacity: 0.7
+                      }  // Far right
+                    ];
+                    
+                    const pos = positions[rotatedIndex];
+                    const zIndex = rotatedIndex === 2 ? 10 : rotatedIndex === 1 || rotatedIndex === 3 ? 5 : 1;
+                    
+                    return (
+                      <div
+                        key={index}
+                        className="absolute transition-all duration-1000 ease-in-out"
+                        style={{
+                          transform: `
+                            translate3d(${pos.x}px, ${pos.y}px, ${pos.z}px) 
+                            rotateX(${pos.rotateX}deg) 
+                            rotateY(${pos.rotateY}deg) 
+                            rotateZ(${pos.rotateZ}deg) 
+                            scale(${pos.scale})
+                          `,
+                          zIndex: zIndex,
+                          opacity: pos.opacity,
+                          transformStyle: 'preserve-3d',
+                          transformOrigin: 'center center'
+                        }}
+                      >
+                        <div 
+                          className="relative w-[300px] h-[420px] rounded-[24px] overflow-hidden shadow-2xl"
+                          style={{
+                            transform: 'translateZ(0)',
+                            backfaceVisibility: 'hidden'
+                          }}
+                        >
+                          <img
+                            src={card.src}
+                            alt={card.title}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                          <div className="absolute bottom-6 left-6 text-left">
+                            <p className="text-base font-semibold text-white mb-1">{card.title}</p>
+                            <p className="text-base font-medium text-white/90">{card.subtitle}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-          </div>
-
-          <div className="relative w-48 h-64 transform rotate-3 hover:rotate-0 transition-transform duration-300">
-            <img
-              src="/abstract-blue-and-gold-soundwaves-visualization.jpg"
-              alt="Sound waves"
-              className="w-full h-full object-cover rounded-lg"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg" />
-            <div className="absolute bottom-4 left-4 text-left">
-              <p className="text-sm font-medium">Visualizing distorted</p>
-              <p className="text-sm font-medium">sound waves</p>
-            </div>
-          </div>
-
-          <div className="relative w-48 h-64 transform rotate-12 hover:rotate-0 transition-transform duration-300">
-            <img
-              src="/purple-pink-abstract-marble-texture.jpg"
-              alt="Abstract texture"
-              className="w-full h-full object-cover rounded-lg"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg" />
           </div>
         </div>
       </section>
@@ -124,106 +289,71 @@ export default function HomePage() {
 
       {/* Explore Countries Section */}
       <section className="py-20 px-6">
-        <h2 className="text-4xl font-bold text-center mb-16">Explore Top Countries</h2>
+        <h2 className="text-6xl font-bold text-center mb-20">Explore Top Countries</h2>
 
         <div className="relative max-w-6xl mx-auto">
-          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 space-y-4">
-            <div className="bg-black/60 backdrop-blur-sm rounded-lg p-4 space-y-3">
-              <div className="flex items-center gap-3 cursor-pointer group">
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-black font-bold text-sm group-hover:bg-red-500 group-hover:text-white transition-colors">
-                  1
-                </div>
-                <span className="text-sm font-medium text-white group-hover:opacity-100">Japan</span>
+          {/* Line Navigation */}
+          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-20">
+            <div className="flex flex-col items-center space-y-8">
+              {/* Vertical Line */}
+              <div className="w-1 h-32 bg-white/30 rounded-full"></div>
+              
+              {/* Navigation Circles */}
+              <div className="flex flex-col space-y-6">
+                {countries.map((_, index) => (
+                  <div
+                    key={index}
+                    onClick={() => setActiveCountry(index)}
+                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg cursor-pointer hover:scale-110 transition-all duration-300 ${
+                      activeCountry === index
+                        ? 'bg-white text-black'
+                        : 'bg-white/30 text-white'
+                    }`}
+                  >
+                    {index + 1}
+                  </div>
+                ))}
               </div>
-              <div className="flex items-center gap-3 cursor-pointer group">
-                <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-white font-bold text-sm group-hover:bg-red-500 transition-colors">
-                  2
-                </div>
-                <span className="text-sm font-medium text-gray-300 group-hover:text-white">Indonesia</span>
-              </div>
-              <div className="flex items-center gap-3 cursor-pointer group">
-                <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center text-white font-bold text-sm group-hover:bg-red-500 transition-colors">
-                  3
-                </div>
-                <span className="text-sm font-medium text-gray-300 group-hover:text-white">Thailand</span>
-              </div>
+              
+              {/* Vertical Line */}
+              <div className="w-1 h-32 bg-white/30 rounded-full"></div>
             </div>
           </div>
 
-          <div className="relative h-96 rounded-2xl overflow-hidden">
-            <img
-              src="/nusa-penida-indonesia-tropical-island-aerial-view.jpg"
-              alt="Nusa Penida"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+          {/* Main Content Area */}
+          <div className="ml-20">
+            <div className="relative h-[500px] rounded-2xl overflow-hidden">
+              <img
+                src={countries[activeCountry].image}
+                alt={countries[activeCountry].name}
+                className="w-full h-full object-cover transition-all duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent" />
 
-            <div className="absolute left-24 top-1/2 transform -translate-y-1/2 text-left">
-              <h3 className="text-4xl font-bold mb-4">Nusa Penida</h3>
-              <p className="text-lg text-[#b2b2b2] mb-6 max-w-md">
-                Nusa Penida is the largest and most scenic of the three Nusa Islands, famous for its picturesque beaches
-                that look like cliff formations and lagoons.
-              </p>
-              <Button className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3">DISCOVER</Button>
-            </div>
-
-            <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-              <div className="flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1">
-                <MapPin className="w-4 h-4 text-white" />
-                <span className="text-sm font-medium text-white">Kelingking Beach</span>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <div key={i} className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-                  ))}
-                </div>
+              <div className="absolute left-12 top-1/2 transform -translate-y-1/2 text-left">
+                <h3 className="text-6xl font-bold mb-6 text-white transition-all duration-500">
+                  {countries[activeCountry].name}
+                </h3>
+                <p className="text-2xl text-white/90 mb-8 max-w-2xl leading-relaxed transition-all duration-500">
+                  {countries[activeCountry].description}
+                </p>
+                <Button className={`${countries[activeCountry].buttonColor} text-white px-12 py-4 text-lg font-semibold transition-all duration-500`}>
+                  {countries[activeCountry].buttonText}
+                </Button>
               </div>
-            </div>
 
-            <div className="absolute top-20 right-1/3">
-              <div className="flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1">
-                <MapPin className="w-4 h-4 text-white" />
-                <span className="text-sm font-medium text-white">Broken Beach</span>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <div key={i} className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-                  ))}
-                </div>
+              {/* Three Side Images */}
+              <div className="absolute right-8 top-8 space-y-4">
+                {countries[activeCountry].sideImages.map((sideImage, index) => (
+                  <div key={index} className="w-40 h-32 rounded-lg overflow-hidden shadow-2xl transition-all duration-500">
+                    <img
+                      src={sideImage.src}
+                      alt={sideImage.alt}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                ))}
               </div>
-            </div>
-
-            <div className="absolute bottom-20 right-1/4">
-              <div className="flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-1">
-                <MapPin className="w-4 h-4 text-white" />
-                <span className="text-sm font-medium text-white">Angel's Billabong</span>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute right-8 top-8 space-y-4">
-              <div className="w-32 h-24 rounded-lg overflow-hidden">
-                <img
-                  src="/kelingking-beach-nusa-penida-cliff.jpg"
-                  alt="Kelingking Beach"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="w-32 h-24 rounded-lg overflow-hidden">
-                <img
-                  src="/crystal-bay-nusa-penida-turquoise-water.jpg"
-                  alt="Crystal Bay"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-2">
-              <div className="w-2 h-2 bg-white rounded-full"></div>
-              <div className="w-2 h-2 bg-white/40 rounded-full"></div>
-              <div className="w-2 h-2 bg-white/40 rounded-full"></div>
             </div>
           </div>
         </div>

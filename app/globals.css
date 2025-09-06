@@ -123,3 +123,38 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* 3D Card Layout Styles */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.fan-container {
+  /* Static fan layout - no animations */
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  opacity: 1;
+}
+
+.fan-card {
+  transform-style: preserve-3d;
+  transform-origin: center center;
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.card-hover:hover {
+  /* Hover effect handled by parent transform */
+}
+
+/* No animations needed */
+
+/* Ensure proper 3D rendering */
+.card-3d * {
+  backface-visibility: hidden;
+}
